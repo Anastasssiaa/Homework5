@@ -16,19 +16,24 @@ public class MainActivity2 extends AppCompatActivity {
             return;
         }
 
+
+
+
+
         if (savedInstanceState == null) {
 
             DegreesFragment degrees = new DegreesFragment();
             degrees.setArguments(getIntent().getExtras());
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, degrees).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, degrees)
+                    .commit();
 
         }
 
 
 
 
-        }
     }
 }

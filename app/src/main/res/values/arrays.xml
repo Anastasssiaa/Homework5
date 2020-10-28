@@ -16,4 +16,12 @@
         <item>17</item>
     </integer-array>
 
+    <integer-array name="degreesForWeek">
+        <item>15</item>
+        <item>17</item>
+        <item>20</item>
+        <item>21</item>
+        <item>17</item>
+    </integer-array>
+
 </resources>

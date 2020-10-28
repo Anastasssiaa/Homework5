@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import static com.example.myapplication.DegreesFragment.PARCEL;
+
+import java.util.zip.Inflater;
+
 public class CitiesFragment extends Fragment {
 
     boolean isExist;
@@ -36,7 +40,7 @@ public class CitiesFragment extends Fragment {
         if (savedInstanceState != null){
             currentParcel = (Parcel)savedInstanceState.getSerializable("CurrentCity");
         } else {
-            currentParcel = new Parcel(0, getResources().getStringArray(R.id.cities)[0]);
+            currentParcel = new Parcel(0, getResources().getStringArray(R.id.cities)[0], getResources().getIntArray(R.id.degreesForWeek));
         }
 
         if (isExist){
@@ -46,7 +50,7 @@ public class CitiesFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt("CurrentCity", currentParcel);
+        outState.putSerializable("CurrentCity", currentParcel);
         super.onSaveInstanceState(outState);
     }
 
@@ -60,8 +64,12 @@ public class CitiesFragment extends Fragment {
         LinearLayout layoutView = (LinearLayout) view;
         String[] cities = getResources().getStringArray(R.array.cities);
 
+        LayoutInflater layoutInflater = getLayoutInflater();
+
         for (int i = 0; i < cities.length; i++) {
             String city = cities[i];
+
+            View item = layoutInflater.inflate(R.layout.item, layoutView, false);
             TextView tv = new TextView(getContext());
             tv.setText(city);
             tv.setTextSize(30);
@@ -72,7 +80,7 @@ public class CitiesFragment extends Fragment {
                 @SuppressLint("ResourceType")
                 @Override
                 public void onClick(View v) {
-                    currentParcel = new Parcel(fi, getResources().getStringArray(R.id.cities)[fi]);
+                    currentParcel = new Parcel(fi, getResources().getStringArray(R.id.cities)[fi], getResources().getIntArray(R.id.degreesForWeek));
                     showDegrees(currentParcel);
                 }
             });
@@ -83,7 +91,7 @@ public class CitiesFragment extends Fragment {
     private void showDegrees(Parcel parcel){
         if (isExist){
             DegreesFragment degrees = (DegreesFragment)getFragmentManager().findFragmentById(R.id.degrees);
-            if (degrees == null || degrees.getText() != parcel.getDegrees()){
+            if (degrees == null || degrees.getParcel().getDegrees() != parcel.getDegrees()){
                 degrees = DegreesFragment.create(parcel);
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -95,9 +103,8 @@ public class CitiesFragment extends Fragment {
         } else {
             Intent intent = new Intent();
             intent.setClass(getActivity(), MainActivity2.class);
-            intent.putExtra("index", parcel);
+            intent.putExtra(PARCEL, parcel);
             startActivity(intent);
             }
         }
     }
-}
