@@ -40,7 +40,7 @@ public class CitiesFragment extends Fragment {
         if (savedInstanceState != null){
             currentParcel = (Parcel)savedInstanceState.getSerializable("CurrentCity");
         } else {
-            currentParcel = new Parcel(0, getResources().getStringArray(R.id.cities)[0], getResources().getIntArray(R.id.degreesForWeek));
+            currentParcel = new Parcel(0, getResources().getStringArray(R.id.cities)[0]);
         }
 
         if (isExist){

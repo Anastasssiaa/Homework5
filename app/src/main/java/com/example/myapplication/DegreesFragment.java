@@ -40,7 +40,7 @@ public class DegreesFragment extends Fragment {
 
         TextView cityName = layout.findViewById(R.id.cities);
         TextView degrees = layout.findViewById(R.id.degrees);
-        TextView degreesForWeek = layout.findViewById(R.id.degreesForWeek);
+        //TextView degreesForWeek = layout.findViewById(R.id.degreesForWeek);
 
         TypedArray deg = getResources().obtainTypedArray(R.array.degrees);
 
@@ -48,7 +48,7 @@ public class DegreesFragment extends Fragment {
 
         cityName.setText(parcel.getCityName());
         degrees.setText(deg.getResourceId(parcel.getDegrees(), -1));
-        degreesForWeek.setText(parcel.getDegreesForWeek());
+       // degreesForWeek.setText(parcel.getDegreesForWeek());
 
         return layout;
 
