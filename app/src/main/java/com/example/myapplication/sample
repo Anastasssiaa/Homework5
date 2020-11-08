@@ -1,0 +1,11 @@
+{
+  "parcel": {
+    "cityName": "Moscow",
+    "degrees": 15
+  },
+
+  "weather":{
+    "main": "Clouds",
+    "description": "broken clouds"
+  }
+}

@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Handler;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,8 @@ public class SocnetAdapter extends RecyclerView.Adapter<SocnetAdapter.ViewHolder
 
     private SocialDataSource  dataSource;
     private OnItemClickListener itemClickListener;  // Слушатель будет устанавливаться извне
+    private Activity activity;
+    private List<String> data;
 
     // Передаем в конструктор источник данных
     // В нашем случае это массив, но может быть и запросом к БД
@@ -58,6 +62,13 @@ public class SocnetAdapter extends RecyclerView.Adapter<SocnetAdapter.ViewHolder
         // Вынести на экран используя ViewHolder
         Soc soc = dataSource.getSoc(i);
         viewHolder.setData(soc.getCity(), soc.getDegrees(), soc.getDegreesForWeek());
+
+        TextView textElement = holder.getTextElement();
+        textElement.setText(data.get(position));
+
+        if (activity != null){
+            activity.registerForContextMenu(textElement);
+        }
     }
 
     // Вернуть размер данных, вызывается менеджером
