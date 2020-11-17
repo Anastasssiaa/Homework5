@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static com.example.myapplication.DegreesFragment.PARCEL;
 
@@ -80,6 +83,20 @@ public class CitiesFragment extends Fragment {
                 @SuppressLint("ResourceType")
                 @Override
                 public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.class);
+                    builder.setTitle("")
+                            .setMessage("")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Toast.makeText(CitiesFragment.this, "Ok", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                            .create()
+                            .show();
+
                     currentParcel = new Parcel(fi, getResources().getStringArray(R.id.cities)[fi], getResources().getIntArray(R.id.degreesForWeek));
                     showDegrees(currentParcel);
                 }
