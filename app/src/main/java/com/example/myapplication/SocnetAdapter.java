@@ -20,6 +20,12 @@ import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class SocnetAdapter extends RecyclerView.Adapter<SocnetAdapter.ViewHolder> {
 
     private static final String TAG = "WEATHER";
@@ -102,6 +108,33 @@ public class SocnetAdapter extends RecyclerView.Adapter<SocnetAdapter.ViewHolder
            // degreesForWeek = itemView.findViewById(R.id.degreesForWeek);
         }
 
+        private void initRetrofit(){
+            Retrofit retrofit;
+            retrofit = new Retrofit.Builder()
+                    .baseUrl("http://api.openweathermap.org/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            openWeather = retrofit.create(openWeather.class);
+        }
+
+        private void requestRetrofit(String city, String keyApi){
+            openWeather.loadWeather(city, keyApi)
+                    .enqueue(new Callback<Weather>() {
+                        @Override
+                        public void onResponse(Call<Weather> call, Response<Weather> response) {
+                            if (response.body() != null) {
+                                degrees.setText(Float.toString(response.body().getMain().getDegrees()));
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Weather> call, Throwable t) {
+                            degrees.setText("Error");
+
+                        }
+                    });
+        }
+
         public void setOnClickListener(final OnItemClickListener listener){
             degrees.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -111,6 +144,9 @@ public class SocnetAdapter extends RecyclerView.Adapter<SocnetAdapter.ViewHolder
                     // Проверяем ее на корректность
                     if (adapterPosition == RecyclerView.NO_POSITION) return;
                     listener.onItemClick(v, adapterPosition);
+
+                    initRetrofit();
+                    requestRetrofit(cities, WEATHER_URL);
 
                     final URL uri = new URL(WEATHER_URL + BuildConfig.WEATHER_API_KEY);
                     final Handler handler = new Handler(); // Запоминаем основной поток
