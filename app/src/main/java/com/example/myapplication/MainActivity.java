@@ -1,5 +1,13 @@
 package com.example.myapplication;
 
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +22,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import java.util.List;
+import java.util.jar.Manifest;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "WEATHER";
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?lat=55.75&lon=37.62&appid=";
     private static final String WEATHER_API_KEY = "YOUR_API_KEY";
-
 
 
     @Override
@@ -32,6 +42,63 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = initToolbar();
         initDrawer(toolbar);
     }
+
+    private void requestPer() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCES_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            requestLoc();
+        }
+    }
+
+    private void getAdress(final LatLng location){
+        final Geocoder geocoder = new Geocoder(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final List<Address> addresses = geocoder.getFromLocation(location, location, 1);
+            }
+        });
+    }
+
+    private void requestLoc() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCES_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            return;
+        ;
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+
+        String provider = locationManager.getBestProvider(criteria, 10000, 10, new LocationListener() {
+
+
+            @Override
+            public void onLocationChanged(Location location) {
+                double lat = location.getLatitude();
+                String latitude = Double.toString(lat);
+
+                double lng = location.getLongitude();
+                String longitude = Double.toString(lng);
+
+                String accuracy = Float.toString(location.getAccuracy())
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        });
+    }
+
 
     private Toolbar initToolbar(){
         Toolbar toolbar = findViewById(R.id.toolbar);
