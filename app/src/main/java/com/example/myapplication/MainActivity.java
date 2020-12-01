@@ -27,6 +27,8 @@ import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int PERMISSION_REQUEST_CODE = 10;
+
     private static final String TAG = "WEATHER";
     private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?lat=55.75&lon=37.62&appid=";
     private static final String WEATHER_API_KEY = "YOUR_API_KEY";
